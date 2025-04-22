@@ -140,13 +140,13 @@
         <h2 class="text-center"><b>Perhitungan Diskon</b></h2>
         <form id="diskonForm" class="form-container">
           <label class="form-label">Harga Barang (Rp)</label>
-          <input type="text" id="hargaInput" class="form-control" placeholder="Masukkan Harga Barang" autocomplete="off" required maxlength="11"/>
+          <input type="text" id="hargaInput" class="form-control" placeholder="Masukkan Harga Barang" autocomplete="off" maxlength="11"/>
 
           <label class="form-label mt-2">Diskon (%)</label>
-          <input type="text" id="diskonInput" class="form-control" placeholder="Masukkan Diskon (1%-100%)" autocomplete="off" required maxlength="4"/>
+          <input type="text" id="diskonInput" class="form-control" placeholder="Masukkan Diskon (1%-100%)" autocomplete="off" maxlength="4"/>
 
           <label class="form-label mt-2">Kuantitas Barang</label>
-          <input type="text" id="kuantitasInput" class="form-control" placeholder="Jumlah Barang" autocomplete="off" required maxlength="12"/>
+          <input type="text" id="kuantitasInput" class="form-control" placeholder="Jumlah Barang" autocomplete="off" maxlength="12"/>
 
           <div class="d-flex gap-2 mt-3">
             <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">
@@ -172,62 +172,71 @@
     }
 
     document.getElementById('diskonForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+  e.preventDefault();
 
-      const hargaInput = document.getElementById('hargaInput').value.replace(/\./g, '').replace(/\D/g, '');
-      const diskonInput = document.getElementById('diskonInput').value.replace('%', '').replace(/\D/g, '');
-      const kuantitasInput = document.getElementById('kuantitasInput').value.replace(/\./g, '').replace(/\D/g, '');
+  const hargaRaw = document.getElementById('hargaInput').value;
+  const diskonRaw = document.getElementById('diskonInput').value;
+  const kuantitasRaw = document.getElementById('kuantitasInput').value;
 
-      const harga = parseInt(hargaInput);
-      const diskon = parseInt(diskonInput);
-      const kuantitas = parseInt(kuantitasInput);
+  const resultDiv = document.getElementById('hasilDiskon');
+  resultDiv.innerHTML = ''; // kosongkan
 
-      const resultDiv = document.getElementById('hasilDiskon');
-      resultDiv.innerHTML = ''; // Kosongkan hasil sebelumnya
+  let emptyMessages = [];
 
-      let errorMessages = [];
+  if (hargaRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Harga tidak boleh kosong.");
+  if (diskonRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Diskon tidak boleh kosong.");
+  if (kuantitasRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kosong.");
 
-      if (isNaN(harga) || harga < 1) {
-        errorMessages.push("⚠ <b>Error!</b> Harga tidak boleh kurang dari 1.");
-      }
-      if (isNaN(diskon) || diskon < 1 || diskon > 100) {
-        errorMessages.push("⚠ <b>Error!</b> Diskon harus antara 1% - 100%.");
-      }
-      if (isNaN(kuantitas) || kuantitas < 1) {
-        errorMessages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kurang dari 1.");
-      }
-
-      if (errorMessages.length > 0) {
-        errorMessages.forEach(msg => {
-          const alertDiv = document.createElement('div');
-          alertDiv.className = 'alert-error';
-          alertDiv.innerHTML = msg;
-          resultDiv.appendChild(alertDiv);
-        });
-      } else {
-        const totalHarga = harga * kuantitas;
-        const nilaiDiskon = totalHarga * (diskon / 100);
-        const totalSetelahDiskon = totalHarga - nilaiDiskon;
-
-        const hasilHTML = `
-          <div class="result-container">
-            <p>Harga Satuan : Rp. <b>${formatNumber(harga)}</b></p>
-            <p>Kuantitas : <b>${formatNumber(kuantitas)}</b> barang</p>
-            <p>Total Harga : Rp. <b>${formatNumber(totalHarga)}</b></p>
-            <p>Diskon ${diskon}% : Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
-            <p>Harga Setelah Diskon : Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
-          </div>
-        `;
-        resultDiv.innerHTML = hasilHTML;
-      }
+  if (emptyMessages.length > 0) {
+    emptyMessages.forEach(msg => {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert-error';
+      alertDiv.innerHTML = msg;
+      resultDiv.appendChild(alertDiv);
     });
+    return;
+  }
 
-    document.getElementById('clearBtn').addEventListener('click', function () {
-      document.getElementById('hargaInput').value = '';
-      document.getElementById('diskonInput').value = '';
-      document.getElementById('kuantitasInput').value = '';
-      document.getElementById('hasilDiskon').innerHTML = '';
-    });
+  // Lanjut perhitungan jika tidak kosong
+  const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/\D/g, ''));
+  const diskon = parseInt(diskonRaw.replace('%', '').replace(/\D/g, ''));
+  const kuantitas = parseInt(kuantitasRaw.replace(/\./g, '').replace(/\D/g, ''));
+
+  const totalHarga = harga * kuantitas;
+  const nilaiDiskon = totalHarga * (diskon / 100);
+  const totalSetelahDiskon = totalHarga - nilaiDiskon;
+
+  const hasilHTML = `
+    <div class="result-container">
+      <p>Harga Satuan : Rp. <b>${formatNumber(harga)}</b></p>
+      <p>Kuantitas : <b>${formatNumber(kuantitas)}</b> barang</p>
+      <p>Total Harga : Rp. <b>${formatNumber(totalHarga)}</b></p>
+      <p>Diskon ${diskon}% : Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
+      <p>Harga Setelah Diskon : Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
+    </div>
+  `;
+  resultDiv.innerHTML = hasilHTML;
+});
+
+document.getElementById('clearBtn').addEventListener('click', function () {
+  const harga = document.getElementById('hargaInput').value.trim();
+  const diskon = document.getElementById('diskonInput').value.trim();
+  const kuantitas = document.getElementById('kuantitasInput').value.trim();
+  const resultDiv = document.getElementById('hasilDiskon');
+
+  if (harga === '' && diskon === '' && kuantitas === '' && resultDiv.innerHTML === '') {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert-error';
+    alertDiv.innerHTML = "⚠ <b>Info:</b> Tidak ada yang harus dibersihkan.";
+    resultDiv.appendChild(alertDiv);
+    return;
+  }
+
+  document.getElementById('hargaInput').value = '';
+  document.getElementById('diskonInput').value = '';
+  document.getElementById('kuantitasInput').value = '';
+  resultDiv.innerHTML = '';
+});
 
     document.getElementById('hargaInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
@@ -242,12 +251,6 @@
 
     document.getElementById('diskonInput').addEventListener('focus', function (e) {
       e.target.value = e.target.value.replace('%', '');
-    });
-
-    document.getElementById('diskonInput').addEventListener('blur', function (e) {
-      if (e.target.value === '') {
-        e.target.value = '0%';
-      }
     });
 
     document.getElementById('kuantitasInput').addEventListener('input', function (e) {

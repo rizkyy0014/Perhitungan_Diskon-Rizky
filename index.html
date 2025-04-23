@@ -143,7 +143,7 @@
           <input type="text" id="hargaInput" class="form-control" placeholder="Masukkan Harga Barang" autocomplete="off" maxlength="11"/>
 
           <label class="form-label mt-2">Diskon (%)</label>
-          <input type="text" id="diskonInput" class="form-control" placeholder="Masukkan Diskon (1%-100%)" autocomplete="off" maxlength="4"/>
+          <input type="text" id="diskonInput" class="form-control" placeholder="Masukkan Diskon Tidak Melebihi 100%" autocomplete="off" maxlength="5"/>
 
           <label class="form-label mt-2">Kuantitas Barang</label>
           <input type="text" id="kuantitasInput" class="form-control" placeholder="Jumlah Barang" autocomplete="off" maxlength="12"/>
@@ -187,7 +187,6 @@
       if (diskonRaw.trim() === '') messages.push("⚠ <b>Error!</b> Diskon tidak boleh kosong.");
       if (kuantitasRaw.trim() === '') messages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kosong.");
   
-      // Jika kosong, tampilkan pesan
       if (messages.length > 0) {
         messages.forEach(msg => {
           const alertDiv = document.createElement('div');
@@ -198,13 +197,14 @@
         return;
       }
   
-      // Jika tidak kosong, validasi logika angka
-      const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/\D/g, ''));
-      const diskon = parseInt(diskonRaw.replace('%', '').replace(/\D/g, ''));
+      // Parsing angka (izinkan minus untuk diskon)
+      const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/[^\d]/g, ''));
+      const diskon = parseInt(diskonRaw.replace('%', '').replace(/[^\-\d]/g, '')); // boleh minus
       const kuantitas = parseInt(kuantitasRaw.replace(/\./g, '').replace(/\D/g, ''));
   
+      // Validasi logika angka
       if (isNaN(harga) || harga < 1) messages.push("⚠ <b>Error!</b> Harga minimal Rp 1.");
-      if (isNaN(diskon) || diskon < 1 || diskon > 100) messages.push("⚠ <b>Error!</b> Diskon harus 1% - 100%.");
+      if (isNaN(diskon) || diskon > 100) messages.push("⚠ <b>Error!</b> Diskon tidak boleh melebihi 100%.");
       if (isNaN(kuantitas) || kuantitas < 1) messages.push("⚠ <b>Error!</b> Kuantitas minimal 1.");
   
       if (messages.length > 0) {
@@ -254,14 +254,14 @@
       resultDiv.innerHTML = '';
     });
   
-    // Format angka
+    // Format input angka
     document.getElementById('hargaInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
   
     document.getElementById('diskonInput').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '');
+      let value = e.target.value.replace(/[^\-\d]/g, ''); // izinkan minus
       if (value !== '') value += '%';
       e.target.value = value;
     });
@@ -274,7 +274,7 @@
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
-  </script>
+  </script>  
   
 </body>
 </html>

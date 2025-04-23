@@ -165,98 +165,116 @@
 
   <footer>&copy; Perhitungan Diskon | Muhammad Rizky | 12 RPL-A</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function formatNumber(value) {
       return new Intl.NumberFormat('id-ID').format(value);
     }
-
+  
     document.getElementById('diskonForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const hargaRaw = document.getElementById('hargaInput').value;
-  const diskonRaw = document.getElementById('diskonInput').value;
-  const kuantitasRaw = document.getElementById('kuantitasInput').value;
-
-  const resultDiv = document.getElementById('hasilDiskon');
-  resultDiv.innerHTML = ''; // kosongkan
-
-  let emptyMessages = [];
-
-  if (hargaRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Harga tidak boleh kosong.");
-  if (diskonRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Diskon tidak boleh kosong.");
-  if (kuantitasRaw.trim() === '') emptyMessages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kosong.");
-
-  if (emptyMessages.length > 0) {
-    emptyMessages.forEach(msg => {
-      const alertDiv = document.createElement('div');
-      alertDiv.className = 'alert-error';
-      alertDiv.innerHTML = msg;
-      resultDiv.appendChild(alertDiv);
+      e.preventDefault();
+  
+      const hargaRaw = document.getElementById('hargaInput').value;
+      const diskonRaw = document.getElementById('diskonInput').value;
+      const kuantitasRaw = document.getElementById('kuantitasInput').value;
+  
+      const resultDiv = document.getElementById('hasilDiskon');
+      resultDiv.innerHTML = ''; // Kosongkan hasil sebelumnya
+  
+      let messages = [];
+  
+      // Validasi kosong
+      if (hargaRaw.trim() === '') messages.push("⚠ <b>Error!</b> Harga tidak boleh kosong.");
+      if (diskonRaw.trim() === '') messages.push("⚠ <b>Error!</b> Diskon tidak boleh kosong.");
+      if (kuantitasRaw.trim() === '') messages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kosong.");
+  
+      // Jika kosong, tampilkan pesan
+      if (messages.length > 0) {
+        messages.forEach(msg => {
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert-error';
+          alertDiv.innerHTML = msg;
+          resultDiv.appendChild(alertDiv);
+        });
+        return;
+      }
+  
+      // Jika tidak kosong, validasi logika angka
+      const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/\D/g, ''));
+      const diskon = parseInt(diskonRaw.replace('%', '').replace(/\D/g, ''));
+      const kuantitas = parseInt(kuantitasRaw.replace(/\./g, '').replace(/\D/g, ''));
+  
+      if (isNaN(harga) || harga < 1) messages.push("⚠ <b>Error!</b> Harga minimal Rp 1.");
+      if (isNaN(diskon) || diskon < 1 || diskon > 100) messages.push("⚠ <b>Error!</b> Diskon harus 1% - 100%.");
+      if (isNaN(kuantitas) || kuantitas < 1) messages.push("⚠ <b>Error!</b> Kuantitas minimal 1.");
+  
+      if (messages.length > 0) {
+        messages.forEach(msg => {
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert-error';
+          alertDiv.innerHTML = msg;
+          resultDiv.appendChild(alertDiv);
+        });
+        return;
+      }
+  
+      // Lanjut jika semua valid
+      const totalHarga = harga * kuantitas;
+      const nilaiDiskon = totalHarga * (diskon / 100);
+      const totalSetelahDiskon = totalHarga - nilaiDiskon;
+  
+      const hasilHTML = `
+        <div class="result-container">
+          <p>Harga Satuan : Rp. <b>${formatNumber(harga)}</b></p>
+          <p>Kuantitas : <b>${formatNumber(kuantitas)}</b> barang</p>
+          <p>Total Harga : Rp. <b>${formatNumber(totalHarga)}</b></p>
+          <p>Diskon ${diskon}% : Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
+          <p>Harga Setelah Diskon : Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
+        </div>
+      `;
+      resultDiv.innerHTML = hasilHTML;
     });
-    return;
-  }
-
-  // Lanjut perhitungan jika tidak kosong
-  const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/\D/g, ''));
-  const diskon = parseInt(diskonRaw.replace('%', '').replace(/\D/g, ''));
-  const kuantitas = parseInt(kuantitasRaw.replace(/\./g, '').replace(/\D/g, ''));
-
-  const totalHarga = harga * kuantitas;
-  const nilaiDiskon = totalHarga * (diskon / 100);
-  const totalSetelahDiskon = totalHarga - nilaiDiskon;
-
-  const hasilHTML = `
-    <div class="result-container">
-      <p>Harga Satuan : Rp. <b>${formatNumber(harga)}</b></p>
-      <p>Kuantitas : <b>${formatNumber(kuantitas)}</b> barang</p>
-      <p>Total Harga : Rp. <b>${formatNumber(totalHarga)}</b></p>
-      <p>Diskon ${diskon}% : Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
-      <p>Harga Setelah Diskon : Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
-    </div>
-  `;
-  resultDiv.innerHTML = hasilHTML;
-});
-
-document.getElementById('clearBtn').addEventListener('click', function () {
-  const harga = document.getElementById('hargaInput').value.trim();
-  const diskon = document.getElementById('diskonInput').value.trim();
-  const kuantitas = document.getElementById('kuantitasInput').value.trim();
-  const resultDiv = document.getElementById('hasilDiskon');
-
-  if (harga === '' && diskon === '' && kuantitas === '' && resultDiv.innerHTML === '') {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert-error';
-    alertDiv.innerHTML = "⚠ <b>Info:</b> Tidak ada yang harus dibersihkan.";
-    resultDiv.appendChild(alertDiv);
-    return;
-  }
-
-  document.getElementById('hargaInput').value = '';
-  document.getElementById('diskonInput').value = '';
-  document.getElementById('kuantitasInput').value = '';
-  resultDiv.innerHTML = '';
-});
-
+  
+    document.getElementById('clearBtn').addEventListener('click', function () {
+      const harga = document.getElementById('hargaInput').value.trim();
+      const diskon = document.getElementById('diskonInput').value.trim();
+      const kuantitas = document.getElementById('kuantitasInput').value.trim();
+      const resultDiv = document.getElementById('hasilDiskon');
+  
+      if (harga === '' && diskon === '' && kuantitas === '' && resultDiv.innerHTML === '') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert-error';
+        alertDiv.innerHTML = "⚠ <b>Info:</b> Tidak ada yang harus dibersihkan.";
+        resultDiv.appendChild(alertDiv);
+        return;
+      }
+  
+      document.getElementById('hargaInput').value = '';
+      document.getElementById('diskonInput').value = '';
+      document.getElementById('kuantitasInput').value = '';
+      resultDiv.innerHTML = '';
+    });
+  
+    // Format angka
     document.getElementById('hargaInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
-
+  
     document.getElementById('diskonInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value !== '') value += '%';
       e.target.value = value;
     });
-
+  
     document.getElementById('diskonInput').addEventListener('focus', function (e) {
       e.target.value = e.target.value.replace('%', '');
     });
-
+  
     document.getElementById('kuantitasInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
   </script>
+  
 </body>
 </html>

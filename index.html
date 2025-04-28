@@ -5,141 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Perhitungan Diskon - Rizky</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
   <style>
-        /* Warna dan Tampilan */
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
 
-        .container {
-            animation: fadeInScale 1s ease-in-out;
-        }
+    .container {
+      animation: fadeInScale 1s ease-in-out;
+    }
 
-        h2 {
-            color: rgb(13, 173, 253);
-        }
+    h2 {
+      color: rgb(13, 173, 253);
+    }
 
-        .form-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            animation: fadeInScale 1s ease-in-out;
-        }
+    .form-container {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      animation: fadeInScale 1s ease-in-out;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4dabf7, #339af0);
-            border: none;
-            color: white;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+    .btn-primary, .btn-success {
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+      color: white;
+      border: none;
+    }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #339af0, #1c7ed6);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-        }
+    .btn-primary {
+      background: linear-gradient(135deg, #4dabf7, #339af0);
+    }
 
-        .btn-success {
-            background: linear-gradient(135deg, #38d9a9, #20c997);
-            border: none;
-            color: white;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #339af0, #1c7ed6);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #20c997, #12b886);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(32, 201, 151, 0.4);
-        }
+    .btn-success {
+      background: linear-gradient(135deg, #38d9a9, #20c997);
+    }
 
-        /* Animasi Halus */
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
+    .btn-success:hover {
+      background: linear-gradient(135deg, #20c997, #12b886);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(32, 201, 151, 0.4);
+    }
 
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
-        @keyframes bounce {
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
 
-            50% {
-                transform: translateY(-5px);
-            }
-        }
+    .result-container {
+      background: #e3f2fd;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 15px;
+      animation: bounce 0.6s ease-in-out;
+    }
 
-        @keyframes shake {
+    .alert-error {
+      background: #ffdddd;
+      color: #d60000;
+      border-left: 5px solid #d60000;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      animation: shake 0.5s ease-in-out;
+    }
 
-            0%,
-            100% {
-                transform: translateX(0);
-            }
+    footer {
+      color: #6c757d;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .history-item {
+    background: #fff3cd;
+    border-left: 5px solid #ffc107;
+    padding: 15px;
+    border-radius: 10px;
+    animation: fadeInScale 0.5s ease-in-out;
+  }
 
-            25% {
-                transform: translateX(-5px);
-            }
+  #historyList {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  #historyContainer {
+  margin-top: 20px;
+}
 
-            50% {
-                transform: translateX(5px);
-            }
+.history-item {
+  background: #ffffff;
+  border-left: 5px solid #4dabf7;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  animation: fadeInScale 0.8s ease-in-out;
+}
 
-            75% {
-                transform: translateX(-5px);
-            }
-        }
-
-        /* Hasil Perhitungan */
-        .result-container {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 15px;
-            animation: bounce 0.6s ease-in-out;
-        }
-
-        /* Alert Jika Salah */
-        .alert-error {
-            background: #ffdddd;
-            color: #d60000;
-            border-left: 5px solid #d60000;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        footer {
-            color: #6c757d;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+.history-item p {
+  margin: 0;
+  font-size: 14px;
+}
+  </style>
 </head>
-
 <body>
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-5">
         <h2 class="text-center"><b>Perhitungan Diskon</b></h2>
         <form id="diskonForm" class="form-container">
-          <label class="form-label">Harga Barang (Rp)</label>
+          <label class="form-label mt-2">Nama Barang</label>
+          <input type="text" id="namaInput" class="form-control" placeholder="Masukkan Nama Barang" autocomplete="off" maxlength="50"/>
+ 
+          <label class="form-label">Kode Barang</label>
+          <input type="text" id="kodeInput" class="form-control" placeholder="Kode Barang" autocomplete="off" maxlength="7"/>
+
+          <label class="form-label mt-2">Harga Barang (Rp)</label>
           <input type="text" id="hargaInput" class="form-control" placeholder="Masukkan Harga Barang" autocomplete="off" maxlength="11"/>
 
           <label class="form-label mt-2">Diskon (%)</label>
@@ -149,16 +150,17 @@
           <input type="text" id="kuantitasInput" class="form-control" placeholder="Jumlah Barang" autocomplete="off" maxlength="12"/>
 
           <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">
-              Hitung Harga Setelah Diskon
-            </button>
-            <button type="button" class="btn btn-success flex-fill py-2 fw-semibold" id="clearBtn">
-              Bersihkan
-            </button>
+            <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">Hitung Harga Setelah Diskon</button>
+            <button type="button" class="btn btn-success flex-fill py-2 fw-semibold" id="clearBtn">Bersihkan</button>
           </div>
         </form>
 
         <div id="hasilDiskon"></div>
+        <div id="historyContainer" class="mt-4">
+          <h4 id="historyTitle" class="text-center text-primary mb-3" style="display: none;"><b>Histori Hitung</b></h4>
+          <div id="historyList" class="d-grid gap-3"></div>
+          <button id="clearHistoryBtn" class="btn btn-danger mt-3 w-100" style="display:none;">Hapus Histori</button>
+        </div>        
       </div>
     </div>
   </div>
@@ -169,24 +171,36 @@
     function formatNumber(value) {
       return new Intl.NumberFormat('id-ID').format(value);
     }
-  
+    function saveHistoryToLocalStorage() {
+  const historyItems = document.querySelectorAll('#historyList .history-item');
+  const historyData = [];
+
+  historyItems.forEach(item => {
+    historyData.push(item.innerHTML);
+  });
+
+  localStorage.setItem('diskonHistory', JSON.stringify(historyData));
+}
+
     document.getElementById('diskonForm').addEventListener('submit', function (e) {
       e.preventDefault();
-  
+
+      const nama = document.getElementById('namaInput').value.trim();
+      const kode = document.getElementById('kodeInput').value.trim();
       const hargaRaw = document.getElementById('hargaInput').value;
       const diskonRaw = document.getElementById('diskonInput').value;
       const kuantitasRaw = document.getElementById('kuantitasInput').value;
-  
       const resultDiv = document.getElementById('hasilDiskon');
-      resultDiv.innerHTML = ''; // Kosongkan hasil sebelumnya
-  
+      resultDiv.innerHTML = '';
+
       let messages = [];
-  
-      // Validasi kosong
+
+      if (nama === '') messages.push("⚠ <b>Error!</b> Nama barang tidak boleh kosong.");
+      if (kode === '') messages.push("⚠ <b>Error!</b> Kode barang tidak boleh kosong.");
       if (hargaRaw.trim() === '') messages.push("⚠ <b>Error!</b> Harga tidak boleh kosong.");
       if (diskonRaw.trim() === '') messages.push("⚠ <b>Error!</b> Diskon tidak boleh kosong.");
       if (kuantitasRaw.trim() === '') messages.push("⚠ <b>Error!</b> Kuantitas tidak boleh kosong.");
-  
+
       if (messages.length > 0) {
         messages.forEach(msg => {
           const alertDiv = document.createElement('div');
@@ -196,17 +210,15 @@
         });
         return;
       }
-  
-      // Parsing angka (izinkan minus untuk diskon)
+
       const harga = parseInt(hargaRaw.replace(/\./g, '').replace(/[^\d]/g, ''));
-      const diskon = parseInt(diskonRaw.replace('%', '').replace(/[^\-\d]/g, '')); // boleh minus
+      const diskon = parseInt(diskonRaw.replace('%', '').replace(/[^\-\d]/g, ''));
       const kuantitas = parseInt(kuantitasRaw.replace(/\./g, '').replace(/\D/g, ''));
-  
-      // Validasi logika angka
+
       if (isNaN(harga) || harga < 1) messages.push("⚠ <b>Error!</b> Harga minimal Rp 1.");
       if (isNaN(diskon) || diskon > 100) messages.push("⚠ <b>Error!</b> Diskon tidak boleh melebihi 100%.");
       if (isNaN(kuantitas) || kuantitas < 1) messages.push("⚠ <b>Error!</b> Kuantitas minimal 1.");
-  
+
       if (messages.length > 0) {
         messages.forEach(msg => {
           const alertDiv = document.createElement('div');
@@ -216,65 +228,99 @@
         });
         return;
       }
-  
-      // Lanjut jika semua valid
+
       const totalHarga = harga * kuantitas;
       const nilaiDiskon = totalHarga * (diskon / 100);
       const totalSetelahDiskon = totalHarga - nilaiDiskon;
-  
+
       const hasilHTML = `
         <div class="result-container">
-          <p>Harga Satuan : Rp. <b>${formatNumber(harga)}</b></p>
-          <p>Kuantitas : <b>${formatNumber(kuantitas)}</b> barang</p>
-          <p>Total Harga : Rp. <b>${formatNumber(totalHarga)}</b></p>
-          <p>Diskon ${diskon}% : Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
-          <p>Harga Setelah Diskon : Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
+          <p>Nama Barang: <b>${nama}</b></p>
+          <p>Kode Barang: <b>${kode}</b></p>
+          <p>Harga Satuan: Rp. <b>${formatNumber(harga)}</b></p>
+          <p>Kuantitas: <b>${formatNumber(kuantitas)}</b> barang</p>
+          <p>Total Harga: Rp. <b>${formatNumber(totalHarga)}</b></p>
+          <p>Diskon ${diskon}%: Rp. <b>${formatNumber(nilaiDiskon)}</b></p>
+          <p>Harga Setelah Diskon: Rp. <b>${formatNumber(totalSetelahDiskon)}</b></p>
         </div>
       `;
       resultDiv.innerHTML = hasilHTML;
+      // Tambahan - Simpan ke history
+      const historyList = document.getElementById('historyList');
+      const historyItem = document.createElement('div');
+      historyItem.className = 'history-item';
+      historyItem.innerHTML = `
+        <p><b>${nama}</b> (${kode})</p>
+        <p>Harga: Rp ${formatNumber(harga)} x ${formatNumber(kuantitas)} barang</p>
+        <p>Diskon: ${diskon}% | Total: <b>Rp ${formatNumber(totalSetelahDiskon)}</b></p>
+      `;
+      historyList.prepend(historyItem); // biar yang terbaru paling atas
+      saveHistoryToLocalStorage();
+      document.getElementById('historyTitle').style.display = 'block';
+clearHistoryBtn.style.display = 'block';
+
     });
-  
+
     document.getElementById('clearBtn').addEventListener('click', function () {
-      const harga = document.getElementById('hargaInput').value.trim();
-      const diskon = document.getElementById('diskonInput').value.trim();
-      const kuantitas = document.getElementById('kuantitasInput').value.trim();
+      const fields = ['namaInput', 'kodeInput', 'hargaInput', 'diskonInput', 'kuantitasInput'];
       const resultDiv = document.getElementById('hasilDiskon');
-  
-      if (harga === '' && diskon === '' && kuantitas === '' && resultDiv.innerHTML === '') {
+      document.getElementById('clearHistoryBtn').addEventListener('click', function () {
+        document.getElementById('historyTitle').style.display = 'none';
+  document.getElementById('historyList').innerHTML = '';
+  localStorage.removeItem('diskonHistory');
+  this.style.display = 'none';
+});
+
+      if (fields.every(id => document.getElementById(id).value.trim() === '') && resultDiv.innerHTML === '') {
         const alertDiv = document.createElement('div');
         alertDiv.className = 'alert-error';
         alertDiv.innerHTML = "⚠ <b>Info:</b> Tidak ada yang harus dibersihkan.";
         resultDiv.appendChild(alertDiv);
         return;
       }
-  
-      document.getElementById('hargaInput').value = '';
-      document.getElementById('diskonInput').value = '';
-      document.getElementById('kuantitasInput').value = '';
+
+      fields.forEach(id => document.getElementById(id).value = '');
       resultDiv.innerHTML = '';
     });
-  
-    // Format input angka
+
     document.getElementById('hargaInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
-  
+
     document.getElementById('diskonInput').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/[^\-\d]/g, ''); // izinkan minus
+      let value = e.target.value.replace(/[^\-\d]/g, '');
       if (value !== '') value += '%';
       e.target.value = value;
     });
-  
+
     document.getElementById('diskonInput').addEventListener('focus', function (e) {
       e.target.value = e.target.value.replace('%', '');
     });
-  
+
     document.getElementById('kuantitasInput').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\D/g, '');
       e.target.value = formatNumber(value);
     });
-  </script>  
-  
+    document.getElementById('clearHistoryBtn').addEventListener('click', function () {
+  document.getElementById('historyList').innerHTML = '';
+  this.style.display = 'none';
+});
+window.addEventListener('load', function () {
+  const savedHistory = JSON.parse(localStorage.getItem('diskonHistory')) || [];
+
+  if (savedHistory.length > 0) {
+    const historyList = document.getElementById('historyList');
+    savedHistory.forEach(itemHTML => {
+      const historyItem = document.createElement('div');
+      historyItem.className = 'history-item';
+      historyItem.innerHTML = itemHTML;
+      historyList.appendChild(historyItem);
+    });
+    document.getElementById('clearHistoryBtn').style.display = 'block';
+  }
+});
+
+  </script>
 </body>
 </html>
